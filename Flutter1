@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+void main() {
+  runApp(const MyApp());
+}
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: const MyWidgets(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: const [
+              MyWidgets(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+class MyWidgets extends StatefulWidget {
+  const MyWidgets({Key? key}) : super(key: key);
+  @override
+  State<MyWidgets> createState() => _MyWidgetsState();
+}
+
+class _MyWidgetsState extends State<MyWidgets> {
+  double? _typePrice = 0;
+  double? _sizePrice = 2.5;
+  double? price=0;
+  final String _margImage='https://d2j6dbq0eux0bg.cloudfront.net/images/67176897/2709743939.jpg';
+  final String _veggieImage='https://stonepizzas.com/wp-content/uploads/2016/10/veg_small.png';
+  String _image='https://i.etsystatic.com/23444619/r/il/6a2b50/2958612098/il_fullxfull.2958612098_l692.jpg';
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar:AppBar(title:const Text('Question'),),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Column(children: [
+           const Text('.::Pizza Order App::.',style: TextStyle(fontSize: 25,color:Colors.green),),
+           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+                DropdownButton<double>(
+              items: const [
+                DropdownMenuItem(value: 0,child: Text('Select Pizza type')),
+                DropdownMenuItem(value: 1.5,child: Text('Veggie Pizza')),
+                DropdownMenuItem(value: 2.5,child: Text('Margherita Pizza')),
+              ],
+              value: _typePrice,
+              onChanged: (newValue) => setState(() {
+                    _typePrice = newValue!;
+                    if(_typePrice==1.5){
+                      _image=_veggieImage;
+                    }
+                    else{
+                      _image=_margImage;
+                    }
+                    price=(_typePrice??0)+(_sizePrice??0);
+                  },)),
+            ],
+           ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Radio<double>(
+                  value: 2.5,
+                  groupValue:_sizePrice , 
+                  onChanged: (newValue) => onPizzasizeChanged(newValue),
+                  ),
+                  const Text('Large Pizza'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Radio<double>(
+                  value: 1.5, 
+                  groupValue: _sizePrice,
+                  onChanged: (newValue) => onPizzasizeChanged(newValue),
+                  ),
+                  const Text('Small Pizza'),
+              ],
+            ),
+            Text('Total Price:JD $price ',style: const TextStyle(color: Colors.green,fontSize: 20),),
+            Image(image: NetworkImage(_image),width: 200,height: 200,),
+            ]),
+        ),
+    );
+  }
+  onPizzasizeChanged(double? newValue) {
+    setState(() {
+      _sizePrice=newValue!;
+      price=(_typePrice ?? 0)+(_sizePrice ?? 0);
+    });
+  }
+}
